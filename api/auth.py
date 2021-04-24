@@ -1,10 +1,16 @@
 from fastapi import APIRouter
-from models.users import UserReq
+from dto.user import UserReq
 from services.user import UserService
 
-app = APIRouter()
-# user_service = UserService()
+auth_app = APIRouter()
+user_service = UserService()
 
-from services.user import user_service
-@app.post('/register/user/')
+
+@auth_app.post('/register', status_code=201)
 def register(user: UserReq):
+    user_service.register(user)
+
+
+@auth_app.post('/register', status_code=200)
+def login(user: UserReq):
+    return user_service.check_login(user)

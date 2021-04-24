@@ -1,5 +1,5 @@
 import time
-from typing import Dict
+from typing import Dict, List
 import jwt
 from settings import BaseConfig as config
 
@@ -13,7 +13,7 @@ def token_response(token: str):
     }
 
 
-def signJWT(user_id: int, user_role: str) -> Dict[str, str]:
+def signJWT(user_id: int, user_role: List[str]) -> Dict[str, str]:
     payload = {
         "user_id": user_id,
         "user_role": user_role,
