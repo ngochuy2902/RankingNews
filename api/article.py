@@ -3,17 +3,16 @@ from fastapi import APIRouter
 
 from data.mongodb import MongoDB
 
-app = APIRouter()
+article_app = APIRouter()
 mongo = MongoDB()
 
 
-@app.get('/articles')
+@article_app.get('/articles')
 def get_articles():
-    date_time = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-    response = mongo.get_data(category="chinh-tri", date_time=date_time)
+    response = mongo.get_articles_by_domain(domain='vnexpress')
     return response
 
 
-@app.get("/")
+@article_app.get("/")
 def read_root():
     return {"Hello": "World"}

@@ -10,10 +10,11 @@ class MongoDB:
     myclient = MongoClient(Conf.MONGO_URI)
     mydb = myclient[Conf.MONGO_DATABASE]
     mycol = mydb[Conf.MONGO_COLLECTION]
+    time = datetime.datetime.now().replace(day=datetime.datetime.now().day - 1, hour=0, minute=0, second=0)
 
     def get_articles_by_category(self, category: str):
-        time = datetime.datetime.now().replace(day=datetime.datetime.now().day-2, hour=0, minute=0, second=0)
-        query = {"category": category, "time": {"$gt": time}}
+
+        query = {"category": category, "time": {"$gt": self.time}}
 
         articles = self.mycol.find(query)
         response = []
@@ -22,7 +23,7 @@ class MongoDB:
         return response
 
     def get_articles_by_domain(self, domain: str):
-        query = {"domain": domain}
+        query = {"domain": domain, "time": {"$gt": self.time}}
 
         articles = self.mycol.find(query)
         response = []
@@ -31,7 +32,7 @@ class MongoDB:
         return response
 
     def get_articles_by_domain_category(self, domain: str, category: str):
-        query = {"domain": domain, "category": category}
+        query = {"domain": domain, "category": category, "time": {"$gt": self.time}}
 
         articles = self.mycol.find(query)
         response = []
@@ -51,7 +52,7 @@ if __name__ == '__main__':
     # data = MongoDB().get_articles_by_domain_category(domain="nhandan", category="chinh-tri")
     # data = MongoDB().get_articles_by_url(url='1370159.html')
     if data is None:
-        print("Noneeee")
+        print("None")
     else:
         print(len(data))
         for i in data:
