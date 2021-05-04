@@ -40,13 +40,15 @@ class UserService:
                                  categories=user_req.categories)
             self.mydata.add_new_user(new_user)
         else:
-            raise HTTPException(status_code=400, detail="Username is exist")
+            raise HTTPException(status_code=400, detail="Username already exists")
 
     def check_encrypted_password(self, password: str, hashed: str) -> bool:
         return self.pwd_context.verify(password, hashed)
 
     def get_current_user(self, token: str):
         data = decodeJWT(token)
+        if not bool(data):
+            raise HTTPException(status_code=403, detail="Invalid token or expired token.")
         user = self.mydata.get_user_by_user_id(data.get('user_id'))
         roles = self.mydata.get_roles_by_user_id(data.get('user_id'))
         user_res = UserInfo(id=user.id, username=user.username, year_of_birth=user.year_of_birth, roles=roles,
