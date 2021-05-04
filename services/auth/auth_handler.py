@@ -9,7 +9,8 @@ JWT_ALGORITHM = 'HS512'
 
 def token_response(token: str):
     return {
-        "access_token": token
+        "access_token": token,
+        "token_type": "bearer"
     }
 
 

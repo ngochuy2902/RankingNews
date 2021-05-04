@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 
 from models.users import User, UserRegis, UserLogin
@@ -16,12 +16,12 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     return user
 
 
-@auth_app.post('/register', status_code=201)
+@auth_app.post('/register', status_code=status.HTTP_201_CREATED)
 async def register(user: UserRegis):
     user_service.register(user)
 
 
-@auth_app.post('/login/', status_code=200)
+@auth_app.post('/login/', status_code=status.HTTP_200_OK)
 async def login(req: OAuth2PasswordRequestForm = Depends()):
     user = UserLogin(req.username, req.password)
     return user_service.check_login(user)

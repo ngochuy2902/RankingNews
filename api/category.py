@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from fastapi.security import OAuth2PasswordBearer
 
 from models.users import User
@@ -16,6 +16,6 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     return user
 
 
-@category_app.get('/user/categories')
+@category_app.get('/user/categories', status_code=status.HTTP_200_OK)
 def get_category_by_current_user(current_user: User = Depends(get_current_user)):
     return category_service.get_category_by_current_user_id(current_user.id)
