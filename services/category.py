@@ -1,5 +1,4 @@
 from data.mysqldb import MySQL
-from services.auth.auth_handler import decodeJWT
 
 
 class CategoryService:
