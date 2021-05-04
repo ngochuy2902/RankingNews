@@ -1,5 +1,3 @@
-
-
 class BaseConfig:
     APP_HOST = "localhost"
     APP_PORT = 5500
@@ -14,3 +12,16 @@ class BaseConfig:
     MYSQL_DATABASE = 'scraper-news'
 
     EXPIRATION_TOKEN_TIME = 2592000
+
+    RANK_KEYWORD = {
+        "chinh-tri": ["chính phủ", "chủ tịch", "thủ tướng", "quốc hội", "bộ trưởng", "nga", "trung quốc", "mỹ"],
+        "xa-hoi": ["hôn nhân"],
+        "van-hoa": ["văn hoá", "di sản"],
+        "kinh-te": ["vàng", "usd", "xăng", "dầu"],
+        "giao-duc": ["thi", "tốt nghiệp", "đại học", "tuyển", "covid"],
+        "khoa-hoc": ["covid"],
+        "cong-nghe": ["covid"],
+        "y-te": ["covid", "dịch"],
+        "the-thao": ["bóng đá", "UEFA", "world cup", "euro", "c1", "champion league"],
+        "giai-tri": ["oscar", "showbiz"],
+        }

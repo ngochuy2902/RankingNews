@@ -2,6 +2,7 @@ import mysql.connector
 
 from models.users import User, UserRegis
 from models.roles import Role, UserRole
+from models.categories import Category, UserCategory
 from settings import BaseConfig as Conf
 
 
@@ -15,6 +16,15 @@ class MySQL:
     def get_user_by_username(self, username: str):
         mycursor = self.mydb.cursor(dictionary=True)
         mycursor.execute('SELECT * FROM users WHERE username = %s', (username,))
+        result = mycursor.fetchone()
+        if result is not None:
+            return User(**result)
+        else:
+            return None
+
+    def get_user_by_user_id(self, user_id: int):
+        mycursor = self.mydb.cursor(dictionary=True)
+        mycursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
         result = mycursor.fetchone()
         if result is not None:
             return User(**result)
@@ -39,8 +49,8 @@ class MySQL:
         for url in user_role_list:
             role_id_list.append(UserRole(**url).role_id)
         if bool(role_id_list):
-            role_id_list = tuple(role_id_list)
-            mycursor.execute('SELECT * FROM roles WHERE id IN {}'.format(role_id_list))
+            # role_id_list = tuple(role_id_list)
+            mycursor.execute('SELECT * FROM roles WHERE id IN (%s)', role_id_list)
             result = mycursor.fetchall()
             role_names = []
             for r in result:
@@ -49,8 +59,25 @@ class MySQL:
         else:
             return None
 
+    def get_categories_by_user_id(self, user_id: int):
+        mycursor = self.mydb.cursor(dictionary=True)
+        mycursor.execute('SELECT * FROM user_category WHERE user_id = %s', (user_id,))
+        user_category_list = mycursor.fetchall()
+        category_id_list = []
+        for ucl in user_category_list:
+            category_id_list.append(UserCategory(**ucl).category_id)
+        if bool(category_id_list):
+            category_id_list = tuple(category_id_list)
+            mycursor.execute('SELECT * FROM categories WHERE id IN {}'.format(category_id_list))
+            result = mycursor.fetchall()
+            return result
+        else:
+            return None
+
 
 if __name__ == '__main__':
+    mysql = MySQL()
     # print(MySQL().mydb)
-    print(MySQL().get_user_by_username(username="admin"))
-    # print(MySQL().get_roles_by_user_id(user_id=1))
+    # print(MySQL().get_user_by_username(username="admin"))
+    # print(mysql.get_roles_by_user_id(user_id=9))
+    print(mysql.get_categories_by_user_id(user_id=9))

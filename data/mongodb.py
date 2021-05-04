@@ -1,7 +1,6 @@
 import datetime
 
 from pymongo import MongoClient
-
 from settings import BaseConfig as Conf
 from models.articles import Article
 
@@ -47,9 +46,9 @@ class MongoDB:
 
 
 if __name__ == '__main__':
-    data = MongoDB().get_articles_by_category(category="the-thao")
+    # data = MongoDB().get_articles_by_category(category="the-thao")
     # data = MongoDB().get_articles_by_domain(domain="vnexpress")
-    # data = MongoDB().get_articles_by_domain_category(domain="nhandan", category="chinh-tri")
+    data = MongoDB().get_articles_by_domain_category(domain="vnexpress", category="chinh-tri")
     # data = MongoDB().get_articles_by_url(url='1370159.html')
     if data is None:
         print("None")

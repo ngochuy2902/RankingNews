@@ -36,6 +36,22 @@ class UserLogin:
         self.password = password
 
 
+@dataclass
+class UserInfo:
+    id: int
+    username: str
+    year_of_birth: int
+    roles: List[str]
+    email: str
+
+    def __init__(self, id: int, username: str, year_of_birth: int, roles: List[str], email: str):
+        self.id = id
+        self.username = username
+        self.year_of_birth = year_of_birth
+        self.roles = roles
+        self.email = email
+
+
 def get_user_name(user):
     return user.username
 

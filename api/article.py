@@ -1,6 +1,4 @@
-import datetime
 from fastapi import APIRouter
-
 from data.mongodb import MongoDB
 
 article_app = APIRouter()

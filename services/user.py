@@ -1,8 +1,8 @@
-from models.users import UserRegis, UserLogin
+from models.users import UserRegis, UserLogin, UserInfo
 from data.mysqldb import MySQL
 from passlib.context import CryptContext
 from fastapi import HTTPException
-from services.auth.auth_handler import signJWT
+from services.auth.auth_handler import signJWT, decodeJWT
 
 
 class UserService:
@@ -45,9 +45,19 @@ class UserService:
     def check_encrypted_password(self, password: str, hashed: str) -> bool:
         return self.pwd_context.verify(password, hashed)
 
+    def get_current_user(self, token: str):
+        data = decodeJWT(token)
+        user = self.mydata.get_user_by_user_id(data.get('user_id'))
+        roles = self.mydata.get_roles_by_user_id(data.get('user_id'))
+        user_res = UserInfo(id=user.id, username=user.username, year_of_birth=user.year_of_birth, roles=roles,
+                            email=user.email)
+        return user_res
+
 
 if __name__ == '__main__':
     user_service = UserService()
     # user_service.register(UserRegis(username='user', password='user', year_of_birth=1988, categories=[4, 5, 6]))
-    # print(user_service.check_login(UserLogin(username='admin', password='admin')))
+    print(user_service.check_login(UserLogin(username='admin', password='admin')))
     # print(user_service.pwd_context.hash('admin'))
+    # print(user_service.get_user(
+    #     token='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjo5LCJ1c2VyX3JvbGUiOm51bGwsImV4cGlyZXMiOjE2MjIxODAwNTIuNzI0NjI3fQ.UXn-WkC7Sk6NMQmj7Ruy35yuaWlLVLK1plkka1No0ZpjJyJHbysR3Ly0Im5z-STJ79XogaBTjFNOqVAu-8FW3g'))

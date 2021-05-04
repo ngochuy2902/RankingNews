@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 
 from pydantic import BaseModel, Field
 
@@ -10,5 +10,5 @@ class Article(BaseModel):
     title: str = Field(..., alias='title')
     category: str = Field(..., alias='category')
     category_url: str = Field(..., alias='category_url')
-    time: date = Field(..., alias='time')
+    time: datetime = Field(..., alias='time')
     content: str = Field(..., alias='content')
