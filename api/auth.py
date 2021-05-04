@@ -18,7 +18,7 @@ async def register(user: UserRegis):
 
 @auth_app.post('/login', status_code=status.HTTP_200_OK)
 async def login(req: OAuth2PasswordRequestForm = Depends()):
-    user = UserLogin(req.username, req.password)
+    user = UserLogin(username=req.username, password=req.password)
     return user_service.check_login(user)
 
 

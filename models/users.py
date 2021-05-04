@@ -12,44 +12,24 @@ class User(BaseModel):
     email: str = Field(alias='email', default=None)
 
 
-@dataclass
-class UserRegis:
+class UserRegis(BaseModel):
     username: str
     password: str
     year_of_birth: int
     categories: List[int]
 
-    def __int__(self, username=None, password=None, year_of_birth=None, categories=None):
-        self.username = username
-        self.password = password
-        self.year_of_birth = year_of_birth
-        self.categories = categories
 
-
-@dataclass
-class UserLogin:
+class UserLogin(BaseModel):
     username: str
     password: str
 
-    def __init__(self, username: str, password: str):
-        self.username = username
-        self.password = password
 
-
-@dataclass
-class UserInfo:
+class UserInfo(BaseModel):
     id: int
     username: str
     year_of_birth: int
     roles: List[str]
     email: str
-
-    def __init__(self, id: int, username: str, year_of_birth: int, roles: List[str], email: str):
-        self.id = id
-        self.username = username
-        self.year_of_birth = year_of_birth
-        self.roles = roles
-        self.email = email
 
 
 def get_user_name(user):

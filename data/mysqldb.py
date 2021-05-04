@@ -1,8 +1,8 @@
 import mysql.connector
 
-from models.users import User, UserRegis
+from models.categories import UserCategory
 from models.roles import Role, UserRole
-from models.categories import Category, UserCategory
+from models.users import User, UserRegis
 from settings import BaseConfig as Conf
 
 
@@ -37,6 +37,7 @@ class MySQL:
                          (user.username, user.password, user.year_of_birth))
         self.mydb.commit()
         new_user = self.get_user_by_username(username=user.username)
+        mycursor.execute('INSERT INTO user_role(user_id, role_id) VALUES (%s, %s)', (new_user.id, 2))
         for category in user.categories:
             mycursor.execute('INSERT INTO user_category(user_id, category_id) VALUES (%s, %s)', (new_user.id, category))
         self.mydb.commit()
