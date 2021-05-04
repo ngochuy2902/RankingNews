@@ -29,7 +29,7 @@ class UserInfo(BaseModel):
     username: str
     year_of_birth: int
     roles: List[str]
-    email: str
+    email: str = None
 
 
 def get_user_name(user):
