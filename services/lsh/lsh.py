@@ -13,11 +13,20 @@ class LSH:
         return len(intersection) / len(union)
 
     def jaccard_signature(self, a: List[int], b: List[int]):
+        # jaccard signature with minhash
         union = len(a)
         intersection = 0
         for i in range(len(a)):
             if a[i] == b[i]:
                 intersection = intersection + 1
+        # jaccard ngram
+        # union = 0
+        # intersection = 0
+        # for i in range(len(a)):
+        #     if a[i] == 1 or b[i] == 1:
+        #         union = union + 1
+        #     if a[i] == b[i] == 1:
+        #         intersection = intersection + 1
         return intersection / union
 
     def init_matrix(self, list_docs: List[str]):
@@ -53,7 +62,13 @@ class LSH:
                         arr.append(k)
                         break
             rs.append(arr)
-        return rs
+        return np.array(rs)
+
+    def get_index_of_doc(self, doc: str, list_docs: List[str]):
+        for i in range(len(list_docs)):
+            if doc == list_docs[i]:
+                return i
+        return 0
 
 
 if __name__ == '__main__':
@@ -64,7 +79,7 @@ if __name__ == '__main__':
     s4 = 'Who was the last pharaoh of Germany'
     docs = [s1, s2, s3, s4]
     matrix = lsh.init_matrix(docs)
-    min_hashing = np.matrix(lsh.min_hashing(matrix, 1000))
+    min_hashing = lsh.min_hashing(matrix, 50)
     print(matrix)
     print('\nmin_hashing:')
     print(min_hashing)
@@ -78,3 +93,4 @@ if __name__ == '__main__':
     print('b vs c: ', lsh.jaccard_signature(list_b, list_c))
     print('b vs d: ', lsh.jaccard_signature(list_b, list_d))
     print('c vs d: ', lsh.jaccard_signature(list_c, list_d))
+    print('index = ', lsh.get_index_of_doc(s4, docs))

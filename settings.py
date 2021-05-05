@@ -13,12 +13,14 @@ class BaseConfig:
 
     EXPIRATION_TOKEN_TIME = 2592000
 
-    RANK_KEYWORD = {
+    CATEGORIES = ["chinh-tri", "xa-hoi", "van-hoa", "giao-duc", "khoa-hoc", "cong-nghe", "y-te",  "the-thao", "giai-tri"]
+
+    SCORE_KEYWORD = {
         "chinh-tri": ["chính phủ", "chủ tịch", "thủ tướng", "quốc hội", "bộ trưởng", "nga", "trung quốc", "mỹ"],
         "xa-hoi": ["hôn nhân"],
         "van-hoa": ["văn hoá", "di sản"],
         "kinh-te": ["vàng", "usd", "xăng", "dầu"],
-        "giao-duc": ["thi", "tốt nghiệp", "đại học", "tuyển", "covid"],
+        "giao-duc": ["thi", "tốt nghiệp", "đại học", "tuyển", "Covid"],
         "khoa-hoc": ["covid"],
         "cong-nghe": ["covid"],
         "y-te": ["covid", "dịch"],

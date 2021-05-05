@@ -41,8 +41,7 @@ class MongoDB:
 
     def get_articles_by_url(self, url: str):
         query = {"url": {"$regex": url}}
-        # return Article(**self.mycol.find_one(query))
-        return self.mycol.find_one(query)
+        return Article(**self.mycol.find_one(query))
 
 
 if __name__ == '__main__':
