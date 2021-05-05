@@ -25,3 +25,5 @@ class BaseConfig:
         "the-thao": ["bóng đá", "UEFA", "world cup", "euro", "c1", "champion league"],
         "giai-tri": ["oscar", "showbiz"],
         }
+
+    PROBABILITY_MIN_HASHING = 0.5
