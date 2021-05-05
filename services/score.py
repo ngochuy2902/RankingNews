@@ -28,7 +28,7 @@ class Score:
             time_score = 1 / time * 1000000
             score = time_score
             if self.check_contains_keyword(article.title, self.keyword[category]):
-                print(article.title)
+                # print(article.title)
                 score = score + 10
             index = self.lsh.get_index_of_doc(article.content, article_contents)
             for i in range(len(articles_by_category)):
@@ -36,11 +36,14 @@ class Score:
                     sim = self.lsh.jaccard_signature(min_hash[:, index], min_hash[:, i])
                     # sim = self.lsh.jaccard_signature(matrix[:, index], matrix[:, i])
                     if sim > Config.PROBABILITY_MIN_HASHING:
-                        score = score + 20
-                        print('========================')
-                        print('sim = ', sim)
-                        print(articles_by_category[index])
-                        print(articles_by_category[i])
+                        if articles_by_category[index].time < articles_by_category[i].time:
+                            score = score + 20
+                        else:
+                            score = score - 99999
+                        # print('========================')
+                        # print('sim = ', sim)
+                        # print(articles_by_category[index])
+                        # print(articles_by_category[i])
             rs.append({"id": article.id, "url": article.url, "score": score})
         return rs
 
