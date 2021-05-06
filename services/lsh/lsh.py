@@ -62,10 +62,7 @@ class LSH:
                 col = matrix[:, j]
                 mul = pi_array * col
                 mul = np.extract(mul > 0, mul)
-                # try:
                 arr.append(np.amin(mul))
-                # except ValueError:
-                #     pass
             rs.append(arr)
         return np.array(rs)
 
