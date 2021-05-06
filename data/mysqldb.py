@@ -3,9 +3,9 @@ from typing import List
 
 import mysql.connector
 
-from models.categories import UserCategory
+from models.categories import UserCategory, Category
 from models.roles import Role, UserRole
-from models.scores import ScoreInsert
+from models.scores import ScoreInsert, Score
 from models.users import User, UserRegis
 from settings import BaseConfig as Conf
 
@@ -73,7 +73,10 @@ class MySQL:
         if bool(category_id_list):
             category_id_list = tuple(category_id_list)
             mycursor.execute('SELECT * FROM categories WHERE id IN {}'.format(category_id_list))
-            result = mycursor.fetchall()
+            categories = mycursor.fetchall()
+            result = []
+            for c in categories:
+                result.append(Category(**c))
             return result
         else:
             return None
@@ -90,6 +93,22 @@ class MySQL:
             mycursor.execute(sql, value)
         self.mydb.commit()
 
+    def get_current_session_id(self):
+        mycursor = self.mydb.cursor(dictionary=True)
+        mycursor.execute('SELECT MAX(id) FROM sessions')
+        return mycursor.fetchone().get('MAX(id)')
+
+    def fetch_articles_ranking(self, session_id: int, category: str, limit: int):
+        mycursor = self.mydb.cursor(dictionary=True)
+        sql = 'SELECT * FROM scores WHERE session_id = %s AND category = %s ORDER BY score DESC LIMIT %s'
+        value = (session_id, category, limit)
+        mycursor.execute(sql, value)
+        article_scores = mycursor.fetchall()
+        result = []
+        for ars in article_scores:
+            result.append(Score(**ars))
+        return result
+
 
 if __name__ == '__main__':
     mysql = MySQL()
@@ -97,4 +116,8 @@ if __name__ == '__main__':
     # print(MySQL().get_user_by_username(username="admin"))
     # print(mysql.get_roles_by_user_id(user_id=9))
     # print(mysql.get_categories_by_user_id(user_id=9))
-    print(mysql.add_article_scores())
+    # print(mysql.add_article_scores())
+    # print(mysql.get_current_session_id())
+    data = mysql.fetch_articles_ranking(session_id=19, category='chinh-tri', limit=5)
+    for i in data:
+        print(i)

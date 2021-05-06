@@ -13,7 +13,7 @@ class BaseConfig:
 
     EXPIRATION_TOKEN_TIME = 2592000
 
-    CATEGORIES = ["chinh-tri", "xa-hoi", "van-hoa", "giao-duc", "khoa-hoc", "cong-nghe", "y-te",  "the-thao", "giai-tri"]
+    CATEGORIES = ["chinh-tri", "xa-hoi", "van-hoa", "giao-duc", "khoa-hoc", "cong-nghe", "y-te", "the-thao", "giai-tri"]
 
     SCORE_KEYWORD = {
         "chinh-tri": ["chính phủ", "chủ tịch", "thủ tướng", "quốc hội", "bộ trưởng", "nga", "trung quốc", "mỹ"],
@@ -26,6 +26,8 @@ class BaseConfig:
         "y-te": ["covid", "dịch"],
         "the-thao": ["bóng đá", "UEFA", "world cup", "euro", "c1", "champion league"],
         "giai-tri": ["oscar", "showbiz"],
-        }
+    }
 
     PROBABILITY_MIN_HASHING = 0.5
+
+    NUMBER_OF_ARTICLES = 15

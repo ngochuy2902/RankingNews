@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 
-from models.users import User, UserRegis, UserLogin
+from models.users import User, UserRegis, UserLogin, UserInfo
 from services.auth import oauth2
 from services.category import CategoryService
 from services.user import UserService
@@ -23,12 +23,8 @@ async def login(req: OAuth2PasswordRequestForm = Depends()):
 
 
 @auth_app.get('/user/me')
-async def user_me(current_user: User = Depends(oauth2.get_current_user)):
+async def user_me(current_user: UserInfo = Depends(oauth2.get_current_user)):
     return current_user
 
-#
-# @auth_app.get('/user/categories')
-# async def get_category_by_current_user(current_user: User = Depends(get_current_user)):
-#     return category_service.get_category_by_current_user_id(current_user.id)
 
 
