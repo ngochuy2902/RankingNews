@@ -4,6 +4,7 @@ from typing import List
 from data.mongodb import MongoDB
 from settings import BaseConfig as Config
 from lsh.lsh import LSH
+from models.scores import ScoreInsert
 
 
 class Score:
@@ -18,12 +19,16 @@ class Score:
         return False
 
     def score_by_category(self, category: str):
+        print('\n------------------------------------------------------------------------')
+        print('category: ', category)
         articles_by_category = self.mongo.get_articles_by_category(category=category)
+        print('size: ', len(articles_by_category))
         article_contents = [article.content for article in articles_by_category]
         matrix = self.lsh.init_matrix(list_docs=article_contents)
-        min_hash = self.lsh.min_hashing(matrix=matrix, n_permutation=15)
-        rs = []
+        min_hash = self.lsh.min_hashing(matrix=matrix, n_permutation=100)
+        results = []
         for article in articles_by_category:
+            print('article: ', article)
             time = (datetime.datetime.now() - article.time).total_seconds()
             time_score = 1 / time * 1000000
             score = time_score
@@ -40,12 +45,15 @@ class Score:
                             score = score + 20
                         else:
                             score = score - 99999
-                        # print('========================')
-                        # print('sim = ', sim)
-                        # print(articles_by_category[index])
-                        # print(articles_by_category[i])
-            rs.append({"id": article.id, "url": article.url, "score": score})
-        return rs
+                        print('------------------------')
+                        print('sim = ', sim)
+                        print(articles_by_category[index])
+                        print(articles_by_category[i])
+                        print('------------------------')
+            score_insert = ScoreInsert(article_id=article.id, category=article.category, domain=article.domain,
+                                       score=score)
+            results.append(score_insert)
+        return results
 
 
 if __name__ == '__main__':

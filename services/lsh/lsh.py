@@ -52,15 +52,20 @@ class LSH:
         return np.random.choice(range(n), size=n, replace=False)
 
     def min_hashing(self, matrix, n_permutation: int):
+        print('Min_hashing.')
         rs = []
         for i in range(n_permutation):
+            print('n_permutation: ', i)
             arr = []
             pi_array = self.init_pi_array(len(matrix))
             for j in range(len(matrix[0])):
-                for k in range(len(matrix)):
-                    if matrix[list(pi_array).index(k)][j] == 1:
-                        arr.append(k)
-                        break
+                col = matrix[:, j]
+                mul = pi_array * col
+                mul = np.extract(mul > 0, mul)
+                # try:
+                arr.append(np.amin(mul))
+                # except ValueError:
+                #     pass
             rs.append(arr)
         return np.array(rs)
 

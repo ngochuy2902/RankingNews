@@ -1,7 +1,11 @@
+import datetime
+from typing import List
+
 import mysql.connector
 
 from models.categories import UserCategory
 from models.roles import Role, UserRole
+from models.scores import ScoreInsert
 from models.users import User, UserRegis
 from settings import BaseConfig as Conf
 
@@ -50,7 +54,6 @@ class MySQL:
         for url in user_role_list:
             role_id_list.append(UserRole(**url).role_id)
         if bool(role_id_list):
-            # role_id_list = tuple(role_id_list)
             mycursor.execute('SELECT * FROM roles WHERE id IN (%s)', role_id_list)
             result = mycursor.fetchall()
             role_names = []
@@ -75,10 +78,24 @@ class MySQL:
         else:
             return None
 
+    def add_article_scores(self, scores: List[ScoreInsert]):
+        mycursor = self.mydb.cursor()
+        mycursor.execute('INSERT INTO sessions(created_time) VALUES (%s)', (datetime.datetime.now(),))
+        self.mydb.commit()
+
+        session_id = mycursor.lastrowid
+        for score in scores:
+            # sql = 'INSERT INTO scores(session_id, articles_id, score) VALUES (%s, %s, %s)'
+            sql = 'INSERT INTO scores (session_id, article_id, category, domain, score) VALUES (%s, %s, %s, %s, %s)'
+            value = (session_id, score.article_id, score.category, score.domain, score.score)
+            mycursor.execute(sql, value)
+        self.mydb.commit()
+
 
 if __name__ == '__main__':
     mysql = MySQL()
     # print(MySQL().mydb)
     # print(MySQL().get_user_by_username(username="admin"))
     # print(mysql.get_roles_by_user_id(user_id=9))
-    print(mysql.get_categories_by_user_id(user_id=9))
+    # print(mysql.get_categories_by_user_id(user_id=9))
+    print(mysql.add_article_scores())
