@@ -85,7 +85,6 @@ class MySQL:
 
         session_id = mycursor.lastrowid
         for score in scores:
-            # sql = 'INSERT INTO scores(session_id, articles_id, score) VALUES (%s, %s, %s)'
             sql = 'INSERT INTO scores (session_id, article_id, category, domain, score) VALUES (%s, %s, %s, %s, %s)'
             value = (session_id, score.article_id, score.category, score.domain, score.score)
             mycursor.execute(sql, value)
