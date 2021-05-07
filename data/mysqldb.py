@@ -98,6 +98,12 @@ class MySQL:
         mycursor.execute('SELECT MAX(id) FROM sessions')
         return mycursor.fetchone().get('MAX(id)')
 
+    def get_valid_session_id(self):
+        mycursor = self.mydb.cursor(dictionary=True)
+        mycursor.execute('SELECT MAX(session_id) FROM scores WHERE audio_path IS NOT NULL')
+        result = mycursor.fetchone()
+        return result.get('MAX(session_id)')
+
     def fetch_articles_ranking(self, session_id: int, category: str, limit: int):
         mycursor = self.mydb.cursor(dictionary=True)
         sql = 'SELECT * FROM scores WHERE session_id = %s AND category = %s ORDER BY score DESC LIMIT %s'
