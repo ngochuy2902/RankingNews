@@ -28,6 +28,6 @@ class BaseConfig:
         "giai-tri": ["oscar", "showbiz"],
     }
 
-    PROBABILITY_MIN_HASHING = 0.5
+    PROBABILITY_MIN_HASHING = 0.4
 
     NUMBER_OF_ARTICLES = 15

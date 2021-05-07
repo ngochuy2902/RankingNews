@@ -9,7 +9,7 @@ class MongoDB:
     myclient = MongoClient(Conf.MONGO_URI)
     mydb = myclient[Conf.MONGO_DATABASE]
     mycol = mydb[Conf.MONGO_COLLECTION]
-    time = datetime.datetime.now().replace(day=datetime.datetime.now().day - 1, hour=0, minute=0, second=0)
+    time = datetime.datetime.now().replace(day=datetime.datetime.now().day - 1, hour=17, minute=0, second=0)
 
     def get_articles_by_category(self, category: str):
 

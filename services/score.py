@@ -29,8 +29,13 @@ class Score:
         results = []
         for article in articles_by_category:
             print('article: ', article)
-            time = (datetime.datetime.now() - article.time).total_seconds()
-            time_score = 1 / time * 1000000
+            time_second = (datetime.datetime.now() - article.time).total_seconds()
+            time_second_max = (
+                    datetime.datetime.now() - datetime.datetime.now().replace(day=datetime.datetime.now().day - 1,
+                                                                              hour=17,
+                                                                              minute=0,
+                                                                              second=0)).total_seconds()
+            time_score = (time_second_max - time_second) / time_second_max * 50
             score = time_score
             if self.check_contains_keyword(article.title, self.keyword[category]):
                 # print(article.title)
