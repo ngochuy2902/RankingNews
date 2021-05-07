@@ -109,6 +109,19 @@ class MySQL:
             result.append(Score(**ars))
         return result
 
+    def add_audio_path(self, uuid: str, path: str):
+        mycursor = self.mydb.cursor()
+        sql = 'UPDATE scores SET audio_path = %s WHERE article_id = %s'
+        value = (path, uuid)
+        mycursor.execute(sql, value)
+        self.mydb.commit()
+
+    def get_article_score_by_uuid_and_audio_not_null(self, uuid: str):
+        mycursor = self.mydb.cursor(dictionary=True)
+        mycursor.execute('SELECT * FROM scores WHERE article_id = %s AND audio_path IS NOT NULL', (uuid,))
+        result = mycursor.fetchone()
+        return Score(**result)
+
 
 if __name__ == '__main__':
     mysql = MySQL()

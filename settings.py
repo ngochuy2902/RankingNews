@@ -15,6 +15,16 @@ class BaseConfig:
 
     CATEGORIES = ["chinh-tri", "xa-hoi", "van-hoa", "giao-duc", "khoa-hoc", "cong-nghe", "y-te", "the-thao", "giai-tri"]
 
+    CATEGORIES_NAME = {"chinh-tri": "chính trị",
+                       "xa-hoi": "xã hội",
+                       "van-hoa": "văn hoá",
+                       "giao-duc": "giáo dục",
+                       "khoa-hoc": "khoa học",
+                       "cong-nghe": "công nghệ",
+                       "y-te": "y tế",
+                       "the-thao": "thể thao",
+                       "giai-tri": "giải trí"}
+
     SCORE_KEYWORD = {
         "chinh-tri": ["chính phủ", "chủ tịch", "thủ tướng", "quốc hội", "bộ trưởng", "nga", "trung quốc", "mỹ"],
         "xa-hoi": ["hôn nhân"],
@@ -31,3 +41,5 @@ class BaseConfig:
     PROBABILITY_MIN_HASHING = 0.4
 
     NUMBER_OF_ARTICLES = 15
+
+    BASE_AUDIO_DIR = '/Users/huyhn/Study/DATN/audio/'

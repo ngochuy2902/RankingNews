@@ -1,12 +1,14 @@
 from data.mysqldb import MySQL
 from score import Score
 from settings import BaseConfig as Config
+from speech import TextToSpeech
 
 
 class Rank:
     score = Score()
     categories = Config.CATEGORIES
     mysql = MySQL()
+    tts = TextToSpeech()
 
     def rank_by_session(self):
         article_scores_inserted = []
@@ -14,6 +16,7 @@ class Rank:
             article_scores = self.score.score_by_category(category=category)
             article_scores_inserted.extend(article_scores)
         self.mysql.add_article_scores(article_scores_inserted)
+        self.tts.text_to_speech()
 
 
 if __name__ == '__main__':

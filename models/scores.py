@@ -8,6 +8,7 @@ class Score(BaseModel):
     category: str = Field(..., alias='category')
     domain: str = Field(..., alias='domain')
     score: float = Field(..., alias='score')
+    audio_path: str = Field(alias='audio_path')
 
 
 class ScoreInsert(BaseModel):
