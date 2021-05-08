@@ -6,7 +6,7 @@ import mysql.connector
 from models.categories import UserCategory, Category
 from models.roles import Role, UserRole
 from models.scores import ScoreInsert, Score
-from models.users import User, UserRegis, UserInfo, UserUpdate
+from models.users import User, UserRegis, UserUpdate
 from settings import BaseConfig as Conf
 
 

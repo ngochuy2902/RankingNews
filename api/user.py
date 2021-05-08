@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordBearer
 
-from models.users import UserInfo, UserRegis, UserUpdate
+from models.users import UserInfo, UserUpdate
 from services.auth import oauth2
 from services.category import CategoryService
 from services.user import UserService

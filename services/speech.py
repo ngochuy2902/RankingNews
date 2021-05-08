@@ -3,13 +3,11 @@
 import time
 
 from gtts import gTTS
-from data.mysqldb import MySQL
+
 from data.mongodb import MongoDB
+from data.mysqldb import MySQL
 from settings import BaseConfig as Config
 from thread import MyThread
-import asyncio
-import threading
-import os
 
 
 class TextToSpeech:

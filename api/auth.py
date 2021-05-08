@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 
-from models.users import User, UserRegis, UserLogin, UserInfo
-from services.auth import oauth2
+from models.users import UserRegis, UserLogin
 from services.category import CategoryService
 from services.user import UserService
 
