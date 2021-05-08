@@ -8,6 +8,9 @@ class CategoryService:
         categories = self.mysql.get_categories_by_user_id(user_id=user_id)
         return categories
 
+    def get_all_categories(self):
+        return self.mysql.get_all_categories()
+
 
 if __name__ == '__main__':
     category_service = CategoryService()

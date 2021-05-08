@@ -1,7 +1,6 @@
-from dataclasses import dataclass
 from typing import List
-
 from pydantic import BaseModel, Field
+from models.categories import Category
 
 
 class User(BaseModel):
@@ -17,6 +16,7 @@ class UserRegis(BaseModel):
     password: str
     year_of_birth: int
     categories: List[int]
+    email: str = None
 
 
 class UserLogin(BaseModel):
@@ -29,6 +29,13 @@ class UserInfo(BaseModel):
     username: str
     year_of_birth: int
     roles: List[str]
+    categories: List[Category]
+    email: str = None
+
+
+class UserUpdate(BaseModel):
+    year_of_birth: int
+    categories: List[int]
     email: str = None
 
 

@@ -1,4 +1,4 @@
-from models.users import UserRegis, UserLogin, UserInfo
+from models.users import UserRegis, UserLogin, UserInfo, UserUpdate
 from data.mysqldb import MySQL
 from passlib.context import CryptContext
 from fastapi import HTTPException
@@ -37,7 +37,8 @@ class UserService:
             new_user = UserRegis(username=user_req.username,
                                  password=password_encrypt,
                                  year_of_birth=user_req.year_of_birth,
-                                 categories=user_req.categories)
+                                 categories=user_req.categories,
+                                 email=user_req.email)
             self.mydata.add_new_user(new_user)
         else:
             raise HTTPException(status_code=400, detail="Username already exists")
@@ -51,9 +52,16 @@ class UserService:
             raise HTTPException(status_code=403, detail="Invalid token or expired token.")
         user = self.mydata.get_user_by_user_id(data.get('user_id'))
         roles = self.mydata.get_roles_by_user_id(data.get('user_id'))
+        categories = self.mydata.get_categories_by_user_id(data.get('user_id'))
         user_res = UserInfo(id=user.id, username=user.username, year_of_birth=user.year_of_birth, roles=roles,
-                            email=user.email)
+                            categories=categories, email=user.email)
         return user_res
+
+    def update_user(self, user_update: UserUpdate, current_user: UserInfo):
+        if current_user:
+            self.mydata.update_user(current_user_id=current_user.id, user_update=user_update)
+        else:
+            raise HTTPException(status_code=403, detail="Unauthorized")
 
 
 if __name__ == '__main__':

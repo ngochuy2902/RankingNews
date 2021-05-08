@@ -20,11 +20,3 @@ async def register(user: UserRegis):
 async def login(req: OAuth2PasswordRequestForm = Depends()):
     user = UserLogin(username=req.username, password=req.password)
     return user_service.check_login(user)
-
-
-@auth_app.get('/user/me')
-async def user_me(current_user: UserInfo = Depends(oauth2.get_current_user)):
-    return current_user
-
-
-

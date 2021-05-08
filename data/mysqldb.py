@@ -6,7 +6,7 @@ import mysql.connector
 from models.categories import UserCategory, Category
 from models.roles import Role, UserRole
 from models.scores import ScoreInsert, Score
-from models.users import User, UserRegis
+from models.users import User, UserRegis, UserInfo, UserUpdate
 from settings import BaseConfig as Conf
 
 
@@ -37,13 +37,29 @@ class MySQL:
 
     def add_new_user(self, user: UserRegis):
         mycursor = self.mydb.cursor()
-        mycursor.execute('INSERT INTO users(username, password, year_of_birth) VALUES (%s, %s, %s)',
-                         (user.username, user.password, user.year_of_birth))
+        mycursor.execute('INSERT INTO users(username, password, year_of_birth, email) VALUES (%s, %s, %s, %s)',
+                         (user.username, user.password, user.year_of_birth, user.email))
         self.mydb.commit()
-        new_user = self.get_user_by_username(username=user.username)
-        mycursor.execute('INSERT INTO user_role(user_id, role_id) VALUES (%s, %s)', (new_user.id, 2))
+        user_id = mycursor.lastrowid
+        mycursor.execute('INSERT INTO user_role(user_id, role_id) VALUES (%s, %s)', (user_id, Conf.USER))
         for category in user.categories:
-            mycursor.execute('INSERT INTO user_category(user_id, category_id) VALUES (%s, %s)', (new_user.id, category))
+            mycursor.execute('INSERT INTO user_category(user_id, category_id) VALUES (%s, %s)',
+                             (user_id, category))
+        self.mydb.commit()
+
+    def update_user(self, current_user_id: int, user_update: UserUpdate):
+        mycursor = self.mydb.cursor()
+        sql = 'UPDATE users SET year_of_birth = %s, email = %s WHERE id = %s'
+        value = (user_update.year_of_birth, user_update.email, current_user_id)
+        mycursor.execute(sql, value)
+        self.mydb.commit()
+
+        mycursor.execute('DELETE FROM user_category WHERE user_id = %s', (current_user_id,))
+        self.mydb.commit()
+
+        for category_id in user_update.categories:
+            mycursor.execute('INSERT INTO user_category(user_id, category_id) VALUES (%s, %s)',
+                             (current_user_id, category_id))
         self.mydb.commit()
 
     def get_roles_by_user_id(self, user_id: int):
@@ -81,6 +97,18 @@ class MySQL:
         else:
             return None
 
+    def get_all_categories(self):
+        mycursor = self.mydb.cursor(dictionary=True)
+        mycursor.execute('SELECT * FROM categories')
+        categories = mycursor.fetchall()
+        if bool(categories):
+            result = []
+            for c in categories:
+                result.append(Category(**c))
+            return result
+        else:
+            return None
+
     def add_article_scores(self, scores: List[ScoreInsert]):
         mycursor = self.mydb.cursor()
         mycursor.execute('INSERT INTO sessions(created_time) VALUES (%s)', (datetime.datetime.now(),))
@@ -100,9 +128,16 @@ class MySQL:
 
     def get_valid_session_id(self):
         mycursor = self.mydb.cursor(dictionary=True)
-        mycursor.execute('SELECT MAX(session_id) FROM scores WHERE audio_path IS NOT NULL')
+        mycursor.execute('SELECT MAX(id) FROM sessions WHERE completed = %s', (1,))
         result = mycursor.fetchone()
-        return result.get('MAX(session_id)')
+        return result.get('MAX(id)')
+
+    def update_session_complete(self, session_id: int):
+        mycursor = self.mydb.cursor()
+        sql = 'UPDATE sessions SET completed = %s WHERE session_id = %s'
+        value = (1, session_id,)
+        mycursor.execute(sql, value)
+        self.mydb.commit()
 
     def fetch_articles_ranking(self, session_id: int, category: str, limit: int):
         mycursor = self.mydb.cursor(dictionary=True)

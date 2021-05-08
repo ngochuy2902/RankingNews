@@ -13,6 +13,9 @@ class BaseConfig:
 
     EXPIRATION_TOKEN_TIME = 2592000
 
+    ADMIN = 1
+    USER = 2
+
     CATEGORIES = ["chinh-tri", "xa-hoi", "van-hoa", "giao-duc", "khoa-hoc", "cong-nghe", "y-te", "the-thao", "giai-tri"]
 
     CATEGORIES_NAME = {"chinh-tri": "chính trị",

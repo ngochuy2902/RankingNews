@@ -11,5 +11,10 @@ category_service = CategoryService()
 
 
 @category_app.get('/user', status_code=status.HTTP_200_OK)
-def get_category_by_current_user(current_user: User = Depends(oauth2.get_current_user)):
+async def get_category_by_current_user(current_user: User = Depends(oauth2.get_current_user)):
     return category_service.get_category_by_current_user_id(current_user.id)
+
+
+@category_app.get('/', status_code=status.HTTP_200_OK)
+async def get_all_categories():
+    return category_service.get_all_categories()
