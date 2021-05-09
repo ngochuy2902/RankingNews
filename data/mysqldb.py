@@ -110,15 +110,17 @@ class MySQL:
             return None
 
     def add_article_scores(self, scores: List[ScoreInsert]):
+        session_id = self.get_current_session_id()
         mycursor = self.mydb.cursor()
-        mycursor.execute('INSERT INTO sessions(created_time) VALUES (%s)', (datetime.datetime.now(),))
-        self.mydb.commit()
-
-        session_id = mycursor.lastrowid
         for score in scores:
             sql = 'INSERT INTO scores (session_id, article_id, category, domain, score) VALUES (%s, %s, %s, %s, %s)'
             value = (session_id, score.article_id, score.category, score.domain, score.score)
             mycursor.execute(sql, value)
+        self.mydb.commit()
+
+    def add_new_session(self, created_time: datetime):
+        mycursor = self.mydb.cursor()
+        mycursor.execute('INSERT INTO sessions(created_time, completed) VALUES (%s, %s)', (created_time, 0))
         self.mydb.commit()
 
     def get_current_session_id(self):
@@ -134,7 +136,7 @@ class MySQL:
 
     def update_session_complete(self, session_id: int):
         mycursor = self.mydb.cursor()
-        sql = 'UPDATE sessions SET completed = %s WHERE session_id = %s'
+        sql = 'UPDATE sessions SET completed = %s WHERE id = %s'
         value = (1, session_id,)
         mycursor.execute(sql, value)
         self.mydb.commit()
@@ -159,9 +161,12 @@ class MySQL:
 
     def get_article_score_by_uuid_and_audio_not_null(self, uuid: str):
         mycursor = self.mydb.cursor(dictionary=True)
-        mycursor.execute('SELECT * FROM scores WHERE article_id = %s AND audio_path IS NOT NULL', (uuid,))
+        mycursor.execute('SELECT * FROM scores WHERE article_id = %s AND audio_path IS NOT NULL LIMIT 1', (uuid,))
         result = mycursor.fetchone()
-        return Score(**result)
+        if result is not None:
+            return Score(**result)
+        else:
+            return None
 
 
 if __name__ == '__main__':
