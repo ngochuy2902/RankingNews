@@ -46,3 +46,5 @@ class BaseConfig:
     NUMBER_OF_ARTICLES = 15
 
     BASE_AUDIO_DIR = '/Users/huyhn/Study/DATN/audio/'
+
+    AUDIO_API_URL = 'http://localhost:3002/create'

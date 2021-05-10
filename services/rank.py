@@ -2,21 +2,21 @@ from datetime import datetime
 
 from data.mysqldb import MySQL
 from models.crawler import Crawler
-from services.score import Score
+from services.score import ScoreService
 from settings import BaseConfig as Config
-from services.speech import TextToSpeech
+from services.speech import SpeechService
 
 
 class RankService:
-    score = Score()
+    score_service = ScoreService()
     categories = Config.CATEGORIES
     mysql = MySQL()
-    tts = TextToSpeech()
+    tts = SpeechService()
 
     def rank_by_session(self, crawler: Crawler):
         article_scores_inserted = []
         for category in self.categories:
-            article_scores = self.score.score_by_category(category=category)
+            article_scores = self.score_service.score_by_category(category=category)
             article_scores_inserted.extend(article_scores)
         self.mysql.add_new_session(created_time=crawler.created_time)
         self.mysql.add_article_scores(scores=article_scores_inserted)

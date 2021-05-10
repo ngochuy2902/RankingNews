@@ -8,9 +8,9 @@ rank_app = APIRouter(prefix="/rank", tags=["Rank"])
 rank_service = RankService()
 
 
-@rank_app.post('/')
-async def start_ranking(crawler: Crawler):
+@rank_app.post('')
+async def run_ranking(crawler: Crawler):
     background_tasks = BackgroundTasks()
     background_tasks.add_task(rank_service.rank_by_session, crawler)
-    response = JSONResponse(status_code=200, content="Ranking is run", background=background_tasks)
+    response = JSONResponse(status_code=200, content="Ranking is running", background=background_tasks)
     return response

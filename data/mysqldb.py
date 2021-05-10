@@ -113,8 +113,8 @@ class MySQL:
         session_id = self.get_current_session_id()
         mycursor = self.mydb.cursor()
         for score in scores:
-            sql = 'INSERT INTO scores (session_id, article_id, category, domain, score) VALUES (%s, %s, %s, %s, %s)'
-            value = (session_id, score.article_id, score.category, score.domain, score.score)
+            sql = 'INSERT INTO scores (session_id, article_id, url, category, domain, score) VALUES (%s, %s, %s, %s, %s, %s)'
+            value = (session_id, score.article_id, score.url, score.category, score.domain, score.score)
             mycursor.execute(sql, value)
         self.mydb.commit()
 
@@ -136,8 +136,9 @@ class MySQL:
 
     def update_session_complete(self, session_id: int):
         mycursor = self.mydb.cursor()
-        sql = 'UPDATE sessions SET completed = %s WHERE id = %s'
-        value = (1, session_id,)
+        finished_time = datetime.datetime.now()
+        sql = 'UPDATE sessions SET finished_time = %s, completed = %s WHERE id = %s'
+        value = (finished_time, 1, session_id,)
         mycursor.execute(sql, value)
         self.mydb.commit()
 
@@ -177,6 +178,6 @@ if __name__ == '__main__':
     # print(mysql.get_categories_by_user_id(user_id=9))
     # print(mysql.add_article_scores())
     # print(mysql.get_current_session_id())
-    data = mysql.fetch_articles_ranking(session_id=19, category='chinh-tri', limit=5)
+    data = mysql.fetch_articles_ranking(session_id=57, category='chinh-tri', limit=15)
     for i in data:
         print(i)

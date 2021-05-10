@@ -2,13 +2,16 @@ import datetime
 from typing import List
 
 from data.mongodb import MongoDB
+from data.mysqldb import MySQL
+from models.audio import Audio
 from settings import BaseConfig as Config
 from .lsh.lsh import LSH
 from models.scores import ScoreInsert
 
 
-class Score:
+class ScoreService:
     mongo = MongoDB()
+    mysql = MySQL()
     keyword = Config.SCORE_KEYWORD
     lsh = LSH()
 
@@ -64,14 +67,22 @@ class Score:
                             print(articles_by_category[index])
                             print(articles_by_category[i])
                             print('------------------------')
-            score_insert = ScoreInsert(article_id=article.id, category=article.category, domain=article.domain,
+            score_insert = ScoreInsert(article_id=article.id, url=article.url, category=article.category, domain=article.domain,
                                        score=score)
             results.append(score_insert)
         return results
 
+    def check_audio(self, audio: Audio):
+        if audio.result == "Success":
+            print("create gtts successfully with uuid: ", audio.uuid)
+            path = Config.BASE_AUDIO_DIR + audio.uuid + ".mp3"
+            self.mysql.add_audio_path(audio.uuid, path)
+        else:
+            print("create gtts failed with uuid: ", audio.uuid)
+
 
 if __name__ == '__main__':
-    score = Score()
+    score = ScoreService()
     data = score.score_by_category(category="chinh-tri")
     print(len(data))
     for i in data:

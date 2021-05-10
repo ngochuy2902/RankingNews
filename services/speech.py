@@ -1,13 +1,14 @@
 import random
 import time
 
+import requests
 from gtts import gTTS
 from data.mongodb import MongoDB
 from data.mysqldb import MySQL
 from settings import BaseConfig as Config
 
 
-class TextToSpeech:
+class SpeechService:
     sql = MySQL()
     mongodb = MongoDB()
 
@@ -40,23 +41,24 @@ class TextToSpeech:
             create_list = self.get_list_audio()
         print('create audio list size: ', len(create_list))
         index = 1
-        completed = 0
         for cl in create_list:
             text = cl.get('text')
             uuid = cl.get('uuid')
             print('create audio: ', index)
-            try:
-                self.create_gtts(text=text, uuid=uuid)
-                completed = completed + 1
-            except(Exception,):
-                pass
+            # try:
+            #     self.create_gtts(text=text, uuid=uuid)
+            #     completed = completed + 1
+            # except(Exception,):
+            #     pass
+            self.create_gtts_by_js(uuid=uuid, text=text)
+
             delay = random.randint(10, 20)
             if index % 10 == 0:
                 delay = random.randint(30, 60)
             print("delay in: ", delay)
             time.sleep(delay)
             index = index + 1
-        print('create audio is complete with: ', completed, 'audio')
+        print('create audio is completed')
 
     def create_gtts(self, text: str, uuid: str):
         tts = gTTS(text=text, lang='vi')
@@ -69,6 +71,10 @@ class TextToSpeech:
         except(Exception,) as ex:
             print("create gtts failed with uuid: ", uuid)
             print("Ex: ", ex)
+
+    def create_gtts_by_js(self, uuid: str, text: str):
+        data = {"uuid": uuid, "text": text}
+        requests.post(url=Config.AUDIO_API_URL, json=data)
 
 
 if __name__ == '__main__':

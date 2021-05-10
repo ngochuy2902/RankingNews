@@ -13,6 +13,7 @@ class Score(BaseModel):
 
 class ScoreInsert(BaseModel):
     article_id: str
+    url: str
     category: str
     domain: str
     score: float

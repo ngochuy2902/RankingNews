@@ -14,7 +14,7 @@ def get_number_of_articles_per_category(number_of_articles: int, number_of_categ
     return result
 
 
-class ShowArticle:
+class ArticleService:
     mysql = MySQL()
     mongodb = MongoDB()
     category_service = CategoryService()
@@ -38,7 +38,7 @@ class ShowArticle:
 
 
 if __name__ == '__main__':
-    show_article = ShowArticle()
+    show_article = ArticleService()
     data = show_article.get_articles_by_current_user_id(current_user_id=12)
     for i in data:
         print(i)

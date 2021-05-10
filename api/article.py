@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends
 from models.users import UserInfo
 from services.auth import oauth2
-from services.article import ShowArticle
+from services.article import ArticleService
 
 article_app = APIRouter(prefix="/articles", tags=["Articles"])
-show_article = ShowArticle()
+show_article = ArticleService()
 
 
 @article_app.get('/me')
