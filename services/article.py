@@ -1,5 +1,6 @@
 from data.mongodb import MongoDB
 from data.mysqldb import MySQL
+from models.articles import ArticleShow
 from .category import CategoryService
 from settings import BaseConfig as Config
 
@@ -33,7 +34,16 @@ class ArticleService:
             article_scores.extend(articles)
         result = []
         for i in article_scores:
-            result.append(self.mongodb.get_article_by_uuid(i.article_id))
+            article_mongo = self.mongodb.get_article_by_uuid(i.article_id)
+            article_show = ArticleShow(id=article_mongo.id,
+                                       url=article_mongo.url,
+                                       domain=article_mongo.domain,
+                                       title=article_mongo.title,
+                                       category=article_mongo.category,
+                                       time=article_mongo.time,
+                                       content=article_mongo.content,
+                                       audio_path=i.audio_path)
+            result.append(article_show)
         return result
 
 

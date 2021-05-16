@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from .article import article_app
 from .auth import auth_app
 from .category import category_app
@@ -7,6 +8,19 @@ from .rank import rank_app
 from .audio import audio_app
 
 api_router = FastAPI()
+
+origins = [
+    "http://localhost:3000",
+]
+
+api_router.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 api_router.include_router(article_app)
 api_router.include_router(auth_app)
 api_router.include_router(category_app)

@@ -12,3 +12,15 @@ class Article(BaseModel):
     category_url: str = Field(..., alias='category_url')
     time: datetime = Field(..., alias='time')
     content: str = Field(..., alias='content')
+
+
+class ArticleShow(BaseModel):
+    id: str
+    url: str
+    domain: str
+    title: str
+    category: str
+    time: datetime
+    content: str
+    audio_path: str
+
