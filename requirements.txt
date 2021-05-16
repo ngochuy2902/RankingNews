@@ -56,3 +56,4 @@ mysql-connector-python~=8.0.24
 passlib~=1.7.4
 numpy~=1.20.2
 gTTS~=2.2.2
+aiomysql~=0.0.21

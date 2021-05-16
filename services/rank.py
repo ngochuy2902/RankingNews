@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from data.mysqldb import MySQL
+from data.mysqldb import mysql
 from models.crawler import Crawler
 from services.score import ScoreService
 from settings import BaseConfig as Config
@@ -10,7 +10,7 @@ from services.speech import SpeechService
 class RankService:
     score_service = ScoreService()
     categories = Config.CATEGORIES
-    mysql = MySQL()
+    mysql = mysql
     tts = SpeechService()
 
     def rank_by_session(self, crawler: Crawler):

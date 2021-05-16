@@ -1,27 +1,28 @@
 from models.users import UserRegis, UserLogin, UserInfo, UserUpdate
-from data.mysqldb import MySQL
+from data.mysqldb import mysql
 from passlib.context import CryptContext
 from fastapi import HTTPException
 from services.auth.auth_handler import signJWT, decodeJWT
 
 
 class UserService:
-    mydata = MySQL()
+    mydata = mysql
     pwd_context = CryptContext(
         schemes=["pbkdf2_sha256"],
         default="pbkdf2_sha256",
         pbkdf2_sha256__default_rounds=30000
     )
 
-    def is_exist_user(self, user_req):
-        user = self.mydata.get_user_by_username(username=user_req.username)
+    async def is_exist_user(self, user_req):
+        user = await self.mydata.get_user_by_username(username=user_req.username)
         if user is not None:
             return True
         else:
             return False
 
-    def check_login(self, user_req: UserLogin):
-        if self.is_exist_user(user_req):
+    async def check_login(self, user_req: UserLogin):
+        flag = await self.is_exist_user(user_req)
+        if flag:
             user = self.mydata.get_user_by_username(username=user_req.username)
             if self.check_encrypted_password(user_req.password, user.password):
                 user_role = self.mydata.get_roles_by_user_id(user_id=user.id)
