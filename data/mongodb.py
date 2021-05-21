@@ -44,7 +44,7 @@ class MongoDB:
         return Article(**self.mycol.find_one(query))
 
     def get_article_by_uuid(self, uuid: str):
-        query = {"uuid_url": uuid}
+        query = {"uuid": uuid}
         return Article(**self.mycol.find_one(query))
 
 

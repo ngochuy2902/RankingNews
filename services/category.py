@@ -1,8 +1,8 @@
-from data.mysqldb import mysql
+from data.mysqldb import MySQL
 
 
 class CategoryService:
-    mysql = mysql
+    mysql = MySQL()
 
     def get_category_by_current_user_id(self, user_id: int):
         categories = self.mysql.get_categories_by_user_id(user_id=user_id)

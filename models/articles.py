@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 
 
 class Article(BaseModel):
-    id: str = Field(..., alias="uuid_url")
+    id: str = Field(..., alias="uuid")
     url: str = Field(..., alias='url')
     domain: str = Field(..., alias='domain')
     title: str = Field(..., alias='title')

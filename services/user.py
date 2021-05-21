@@ -1,28 +1,27 @@
 from models.users import UserRegis, UserLogin, UserInfo, UserUpdate
-from data.mysqldb import mysql
+from data.mysqldb import MySQL
 from passlib.context import CryptContext
 from fastapi import HTTPException
 from services.auth.auth_handler import signJWT, decodeJWT
 
 
 class UserService:
-    mydata = mysql
+    mydata = MySQL()
     pwd_context = CryptContext(
         schemes=["pbkdf2_sha256"],
         default="pbkdf2_sha256",
         pbkdf2_sha256__default_rounds=30000
     )
 
-    async def is_exist_user(self, user_req):
-        user = await self.mydata.get_user_by_username(username=user_req.username)
+    def is_exist_user(self, user_req):
+        user = self.mydata.get_user_by_username(username=user_req.username)
         if user is not None:
             return True
         else:
             return False
 
-    async def check_login(self, user_req: UserLogin):
-        flag = await self.is_exist_user(user_req)
-        if flag:
+    def check_login(self, user_req: UserLogin):
+        if self.is_exist_user(user_req):
             user = self.mydata.get_user_by_username(username=user_req.username)
             if self.check_encrypted_password(user_req.password, user.password):
                 user_role = self.mydata.get_roles_by_user_id(user_id=user.id)
@@ -38,8 +37,7 @@ class UserService:
             new_user = UserRegis(username=user_req.username,
                                  password=password_encrypt,
                                  year_of_birth=user_req.year_of_birth,
-                                 categories=user_req.categories,
-                                 email=user_req.email)
+                                 categories=user_req.categories)
             self.mydata.add_new_user(new_user)
         else:
             raise HTTPException(status_code=400, detail="Username already exists")
@@ -55,7 +53,7 @@ class UserService:
         roles = self.mydata.get_roles_by_user_id(data.get('user_id'))
         categories = self.mydata.get_categories_by_user_id(data.get('user_id'))
         user_res = UserInfo(id=user.id, username=user.username, year_of_birth=user.year_of_birth, roles=roles,
-                            categories=categories, email=user.email)
+                            categories=categories)
         return user_res
 
     def update_user(self, user_update: UserUpdate, current_user: UserInfo):

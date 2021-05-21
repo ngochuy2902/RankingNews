@@ -4,12 +4,12 @@ import time
 import requests
 from gtts import gTTS
 from data.mongodb import MongoDB
-from data.mysqldb import mysql
+from data.mysqldb import MySQL
 from settings import BaseConfig as Config
 
 
 class SpeechService:
-    sql = mysql
+    sql = MySQL()
     mongodb = MongoDB()
 
     def get_list_audio(self):

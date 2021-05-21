@@ -8,7 +8,6 @@ class User(BaseModel):
     username: str = Field(..., alias='username')
     password: str = Field(..., alias='password')
     year_of_birth: int = Field(..., alias='year_of_birth')
-    email: str = Field(alias='email', default=None)
 
 
 class UserRegis(BaseModel):
@@ -16,7 +15,6 @@ class UserRegis(BaseModel):
     password: str
     year_of_birth: int
     categories: List[int]
-    email: str = None
 
 
 class UserLogin(BaseModel):
@@ -30,13 +28,11 @@ class UserInfo(BaseModel):
     year_of_birth: int
     roles: List[str]
     categories: List[Category]
-    email: str = None
 
 
 class UserUpdate(BaseModel):
     year_of_birth: int
     categories: List[int]
-    email: str = None
 
 
 def get_user_name(user):

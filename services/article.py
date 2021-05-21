@@ -1,5 +1,5 @@
 from data.mongodb import MongoDB
-from data.mysqldb import mysql
+from data.mysqldb import MySQL
 from models.articles import ArticleShow
 from .category import CategoryService
 from settings import BaseConfig as Config
@@ -16,7 +16,7 @@ def get_number_of_articles_per_category(number_of_articles: int, number_of_categ
 
 
 class ArticleService:
-    mysql = mysql
+    mysql = MySQL()
     mongodb = MongoDB()
     category_service = CategoryService()
 

@@ -2,7 +2,7 @@ import datetime
 from typing import List
 
 from data.mongodb import MongoDB
-from data.mysqldb import mysql
+from data.mysqldb import MySQL
 from models.audio import Audio
 from settings import BaseConfig as Config
 from .lsh.lsh import LSH
@@ -11,7 +11,7 @@ from models.scores import ScoreInsert
 
 class ScoreService:
     mongo = MongoDB()
-    mysql = mysql
+    mysql = MySQL()
     keyword = Config.SCORE_KEYWORD
     lsh = LSH()
 
