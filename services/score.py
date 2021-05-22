@@ -34,7 +34,7 @@ class ScoreService:
         for article in articles_by_category:
             print('article: ', article)
             score = 0
-            if len(article.content) > 5000:
+            if len(article.content) < 200 or len(article.content) > 5000:
                 score = -99999
                 invalid_len_articles.append(article.id)
             else:
@@ -51,7 +51,7 @@ class ScoreService:
                     score = score + 10
                 index = self.lsh.get_index_of_doc(article.content, article_contents)
                 for i in range(len(articles_by_category)):
-                    if i != index and articles_by_category[i].domain != article.domain:
+                    if i != index:
                         sim = self.lsh.jaccard_signature(min_hash[:, index], min_hash[:, i])
                         # sim = self.lsh.jaccard_signature(matrix[:, index], matrix[:, i])
                         if sim > Config.PROBABILITY_MIN_HASHING:
