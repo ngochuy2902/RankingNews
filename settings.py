@@ -48,3 +48,5 @@ class BaseConfig:
     BASE_AUDIO_DIR = 'audio/'
 
     AUDIO_API_URL = 'http://localhost:3002/create'
+
+    UPDATE_AUDIO_CRAWLER_STATUS_API_URL = 'http://localhost:8080/api/internal/ranker'

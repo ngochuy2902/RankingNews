@@ -109,8 +109,8 @@ class MySQL:
         else:
             return None
 
-    def add_article_scores(self, scores: List[ScoreInsert]):
-        session_id = self.get_current_session_id()
+    def add_article_scores(self, session_id: int, scores: List[ScoreInsert]):
+        # session_id = self.get_current_session_id()
         mycursor = self.mydb.cursor()
         for score in scores:
             print("add article score: ", score)

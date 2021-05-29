@@ -1,10 +1,10 @@
-from datetime import datetime
+import requests
 
 from data.mysqldb import MySQL
-from models.crawler import Crawler
+from models.ranker import Ranker
 from services.score import ScoreService
-from settings import BaseConfig as Config
 from services.speech import SpeechService
+from settings import BaseConfig as Config
 
 
 class RankService:
@@ -13,19 +13,28 @@ class RankService:
     mysql = MySQL()
     tts = SpeechService()
 
-    def rank_by_session(self, crawler: Crawler):
-        article_scores_inserted = []
-        for category in self.categories:
-            article_scores = self.score_service.score_by_category(category=category)
-            article_scores_inserted.extend(article_scores)
-        self.mysql.add_new_session(created_time=crawler.created_time)
-        self.mysql.add_article_scores(scores=article_scores_inserted)
-        self.tts.create_audio()
-        self.mysql.update_session_complete(session_id=self.mysql.get_current_session_id())
-        print("complete ranking")
+    def rank_by_session(self, ranker: Ranker):
+
+        try:
+            article_scores_inserted = []
+            for category in self.categories:
+                article_scores = self.score_service.score_by_category(category=category)
+                article_scores_inserted.extend(article_scores)
+            self.mysql.add_article_scores(session_id=ranker.session_id, scores=article_scores_inserted)
+
+            data = Ranker(session_id=ranker.session_id, status='RANKER_SUCCESS')
+            json_data = data.__dict__
+            requests.post(url=Config.UPDATE_AUDIO_CRAWLER_STATUS_API_URL, json=json_data)
+            print("complete ranking")
+        except(Exception,) as ex:
+            data = Ranker(session_id=ranker.session_id, status='RANKER_FAILED')
+            json_data = data.__dict__
+            requests.post(url=Config.UPDATE_AUDIO_CRAWLER_STATUS_API_URL, json=json_data)
+            print(f'Error run spider: {ex}')
 
 
 if __name__ == '__main__':
-    rank = RankService()
-    crawler = Crawler(created_time=datetime.now())
-    rank.rank_by_session(crawler)
+    data = Ranker(session_id=10, status='RANKER_SUCCESS')
+    json_data = data.__dict__
+    print(json_data)
+    requests.post(url=Config.UPDATE_AUDIO_CRAWLER_STATUS_API_URL, json=json_data)
