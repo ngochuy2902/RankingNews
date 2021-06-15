@@ -34,7 +34,7 @@ class ScoreService:
         for article in articles_by_category:
             print('article: ', article)
             score = 0
-            if len(article.content) < 200 or len(article.content) > 5000:
+            if len(article.content) < 500 or len(article.content) > 5000:
                 score = -99999
                 invalid_len_articles.append(article.id)
             else:
